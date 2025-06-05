@@ -3,7 +3,6 @@ Example of MBEANN solving the double pole balancing problem.
 '''
 
 import math
-import multiprocessing
 import os
 import pickle
 import random
@@ -103,7 +102,9 @@ if __name__ == '__main__':
         pool = MPIPoolExecutor()
 
     elif multiProcessLib == 'multiprocessing':
-        import multiprocessing
+        import torch.multiprocessing as multiprocessing
+        if multiprocessing.get_start_method() == 'fork':
+            multiprocessing.set_start_method('spawn', force=True)
         processCount = multiprocessing.cpu_count()
         pool = multiprocessing.Pool(processes=processCount)
     else:
